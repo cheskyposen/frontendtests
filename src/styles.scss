@@ -1,4 +1,55 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-size: 16px;
+  color: #fff;
+}
+
+.mat-sort-header-container {
+  font-weight: bold;
+  color: #222;
+  font-size: 18px;
+}
+
+mat-form-field {
+  color: #888888;
+  max-width: calc(100% - 150px);
+}
+
+.mat-form-field-flex:hover {
+  .mat-form-field-outline {
+    & > * {
+      border-color: #0B36A3 !important;
+    }
+  }
+}
+
+.mat-form-field-outline {
+  background: #efefef;
+}
+
+input.mat-input-element, input.mat-input-element:hover {
+  font-size: 14px;
+}
+
+.hide {
+  visibility: hidden;
+}
+
+.mat-header-cell:not(:last-child) {
+  position: relative;
+  &::before {
+    content: '';
+    position: absolute;
+    border-right: 1px solid #90889e;
+    right: 20px;
+    height: calc(100% - 26px);
+  }
+}
+

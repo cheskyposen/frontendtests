@@ -1,5 +1,5 @@
-import { Component, OnInit,forwardRef } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR ,FormGroup, FormControl } from '@angular/forms';
+import {Component, OnInit, forwardRef} from '@angular/core';
+import {ControlValueAccessor, NG_VALUE_ACCESSOR, FormGroup, FormControl} from '@angular/forms';
 
 @Component({
   selector: 'app-child-form',
@@ -13,17 +13,19 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR ,FormGroup, FormControl } from 
     }
   ]
 })
-export class ChildFormComponent implements OnInit,  ControlValueAccessor {
+export class ChildFormComponent implements OnInit, ControlValueAccessor {
 
-  private disabled : boolean = false; 
-  private form_ = new FormControl("my from");
-  constructor() { }
+  private disabled = false;
+  private form_ = new FormControl('my from');
+
+  constructor() {
+  }
 
   ngOnInit() {
 
-   this.form_.valueChanges.subscribe(d => {
+    this.form_.valueChanges.subscribe(d => {
       this.onChange(d);
- });
+    });
 
   }
 
@@ -45,12 +47,12 @@ export class ChildFormComponent implements OnInit,  ControlValueAccessor {
 
   registerOnTouched(fn: () => void): void {
     this.onTouched = fn;
-    
+
   }
 
   setDisabledState(isDisabled: boolean): void {
- 
-    if(isDisabled)this.form_.disable();
+
+    if (isDisabled) this.form_.disable();
     else this.form_.enable();
   }
 

@@ -1,6 +1,8 @@
-import { Component, ViewChild, ViewChildren, QueryList } from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { stripGeneratedFileSuffix } from '@angular/compiler/src/aot/util';
+import {Component, ViewChild, ViewChildren, QueryList, OnInit} from '@angular/core';
+import {FormControl} from '@angular/forms';
+import {stripGeneratedFileSuffix} from '@angular/compiler/src/aot/util';
+import {MatSort} from '@angular/material/sort';
+import {MatTableDataSource} from '@angular/material';
 
 
 export interface PeriodicElement {
@@ -28,48 +30,85 @@ const ELEMENT_DATA: PeriodicElement[] = [
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
 
   displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
-  dataSource = ELEMENT_DATA;
+  dataSource = new MatTableDataSource(ELEMENT_DATA);
   title = 'testing-app';
 
-  @ViewChildren("childrenInputs") childrenInputs: QueryList<any>;
+  searchPosition = null;
+  searchName = '';
+  searchWeight = '';
+  searchSymbol = '';
 
-  private buttonList: any = false;
-  private inputList = [
-  ];
+
+  @ViewChildren('childrenInputs') childrenInputs: QueryList<any>;
+
+  @ViewChild(MatSort, {static: true}) sort: MatSort;
+
+  private buttonList = false;
+  private inputList: any[] = [];
+  testData = {
+    a: {
+      a_a: '2019-01-01',
+      a_b: 88,
+      a_c: {
+        a_c_a: 'value',
+      }
+    },
+    b: '2019-02-01',
+    c: '2018-13-30',
+    d: {
+      d_a: '2018-12-31',
+      d_b: '2018-12-41',
+      d_c: '2018-07-01'
+    },
+  };
+
+  dateFormatPattern = /^((\d{4})-(0\d|1[0-2])-(0\d|[1-9]|[12]\d|3[01]))$/;
 
   private disabled = false;
 
-
-  private myForm = new FormControl("childForm");
+  private myForm = new FormControl({value: 'childForm', disabled: this.disabled});
 
   ngOnInit() {
-
+    this.dataSource.sort = this.sort;
     this.myForm.disable();
-    
+
     this.myForm.valueChanges.subscribe(v => {
       /* causes ExpressionChangedAfterItHasBeenCheckedError. Fix error keep code structure in places.   */
       this.disabled = true;
     });
-  }
 
-  testData = {
-    a:{
-      a_a:"2019-01-01",
-      a_b:88,
-      a_c:{
-        a_c_a:"value",
-      }
-    },
-    b:"2019-02-01"
+    console.log(this.extractDate(this.testData));
   }
 
   /* extract all dates from testData. ignore non date values */
-  private extractDate (obj:any):Date[]{
-    return [new Date()];
+  private extractDate(data: any): Date[] {
+    const dateArr: Date[] = [];
+
+    this.recursiveWalk(data, dateArr);
+
+    return dateArr;
   }
 
+  private recursiveWalk(obj: any, dateArr: Date[]) {
+    for (const key in obj) {
+      if (!obj.hasOwnProperty(key)) {
+        continue;
+      }
 
+      if (typeof obj[key] === 'object' && obj[key] !== null) {
+        this.recursiveWalk(obj[key], dateArr);
+      } else {
+        if (!isNaN(Date.parse(obj[key])) && this.dateFormatPattern.test(obj[key])) {
+          dateArr.push(new Date(obj[key]));
+        }
+      }
+    }
+  }
+
+  resetPosition() {
+    this.searchName = '';
+  }
 }
