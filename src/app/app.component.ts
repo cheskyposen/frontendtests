@@ -1,4 +1,4 @@
-import { Component, ViewChild, ViewChildren, QueryList } from '@angular/core';
+import {Component, ViewChild, ViewChildren, QueryList, OnInit} from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { stripGeneratedFileSuffix } from '@angular/compiler/src/aot/util';
 
@@ -28,48 +28,45 @@ const ELEMENT_DATA: PeriodicElement[] = [
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
 
   displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
   dataSource = ELEMENT_DATA;
   title = 'testing-app';
 
-  @ViewChildren("childrenInputs") childrenInputs: QueryList<any>;
+  @ViewChildren('childrenInputs') childrenInputs: QueryList<any>;
 
   private buttonList: any = false;
-  private inputList = [
-  ];
+  private inputList = [];
 
   private disabled = false;
 
+  private myForm = new FormControl('childForm');
 
-  private myForm = new FormControl("childForm");
+  testData = {
+    a: {
+      a_a: '2019-01-01',
+      a_b: 88,
+      a_c: {
+        a_c_a: 'value',
+      }
+    },
+    b: '2019-02-01'
+  };
 
   ngOnInit() {
 
     this.myForm.disable();
-    
+
     this.myForm.valueChanges.subscribe(v => {
       /* causes ExpressionChangedAfterItHasBeenCheckedError. Fix error keep code structure in places.   */
       this.disabled = true;
     });
   }
 
-  testData = {
-    a:{
-      a_a:"2019-01-01",
-      a_b:88,
-      a_c:{
-        a_c_a:"value",
-      }
-    },
-    b:"2019-02-01"
-  }
-
   /* extract all dates from testData. ignore non date values */
-  private extractDate (obj:any):Date[]{
+  private extractDate(obj: any): Date[] {
     return [new Date()];
   }
-
 
 }

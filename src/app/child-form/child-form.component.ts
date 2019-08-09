@@ -1,5 +1,5 @@
-import { Component, OnInit,forwardRef } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR ,FormGroup, FormControl } from '@angular/forms';
+import { Component, OnInit, forwardRef } from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR , FormGroup, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-child-form',
@@ -15,20 +15,18 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR ,FormGroup, FormControl } from 
 })
 export class ChildFormComponent implements OnInit,  ControlValueAccessor {
 
-  private disabled : boolean = false; 
-  private form_ = new FormControl("my from");
+  private disabled = false;
+  private form_ = new FormControl('my from');
   constructor() { }
 
   ngOnInit() {
 
-   this.form_.valueChanges.subscribe(d => {
-      this.onChange(d);
- });
-
+     this.form_.valueChanges.subscribe(d => {
+        this.onChange(d);
+    });
   }
 
-  onTouched = (_d: any) => {
-  };
+  onTouched = (d: any) => {};
 
   writeValue(val: any): void {
     console.log(val);
@@ -36,8 +34,7 @@ export class ChildFormComponent implements OnInit,  ControlValueAccessor {
 
   }
 
-  onChange = (_d: any) => {
-  };
+  onChange = (d: any) => {};
 
   registerOnChange(fn): void {
     this.onChange = fn;
@@ -45,13 +42,10 @@ export class ChildFormComponent implements OnInit,  ControlValueAccessor {
 
   registerOnTouched(fn: () => void): void {
     this.onTouched = fn;
-    
   }
 
   setDisabledState(isDisabled: boolean): void {
- 
-    if(isDisabled)this.form_.disable();
-    else this.form_.enable();
+    if (isDisabled) {this.form_.disable(); } else { this.form_.enable(); }
   }
 
 }
