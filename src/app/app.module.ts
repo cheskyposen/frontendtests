@@ -3,10 +3,10 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {MatButtonModule, MatCheckboxModule, MatInputModule} from '@angular/material';
+import {MatButtonModule, MatCheckboxModule, MatInputModule, MatSortModule} from '@angular/material';
 import {MatTableModule} from '@angular/material/table';
 import { ChildFormComponent } from './child-form/child-form.component';
-import {ReactiveFormsModule} from '@angular/forms'
+import {ReactiveFormsModule} from '@angular/forms';
 
 
 @NgModule({
@@ -22,6 +22,7 @@ import {ReactiveFormsModule} from '@angular/forms'
     MatInputModule,
     ReactiveFormsModule,
     MatTableModule,
+    MatSortModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

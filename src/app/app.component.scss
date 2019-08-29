@@ -1,0 +1,22 @@
+/* made the table wider and centered for easier viewing */
+table {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+th.mat-sort-header-sorted {
+  color: black;
+}
+
+.mat-form-field {
+  font-size: 14px;
+  width: 100%;
+}
+
+.wrapper {
+  width: 100%;
+  margin: 0 auto;
+}
+@media screen and (min-width:960px){
+  .wrapper { width: 80%; }
+}

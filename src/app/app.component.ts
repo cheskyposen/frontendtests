@@ -1,6 +1,8 @@
 import {Component, ViewChild, ViewChildren, QueryList, OnInit} from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { stripGeneratedFileSuffix } from '@angular/compiler/src/aot/util';
+import {MatSort, MatTableDataSource} from '@angular/material';
+import * as moment from 'moment';
 
 
 export interface PeriodicElement {
@@ -31,9 +33,10 @@ const ELEMENT_DATA: PeriodicElement[] = [
 export class AppComponent implements OnInit {
 
   displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
-  dataSource = ELEMENT_DATA;
+  dataSource = new MatTableDataSource(ELEMENT_DATA);
   title = 'testing-app';
 
+  @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChildren('childrenInputs') childrenInputs: QueryList<any>;
 
   private buttonList: any = false;
@@ -49,6 +52,11 @@ export class AppComponent implements OnInit {
       a_b: 88,
       a_c: {
         a_c_a: 'value',
+        a_c_b: [
+          // is invalid cause Feb has no 30 days
+          '2019-02-30',
+          '2019-10-10'
+        ]
       }
     },
     b: '2019-02-01'
@@ -56,17 +64,40 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
 
-    this.myForm.disable();
+    this.dataSource.sort = this.sort;
 
-    this.myForm.valueChanges.subscribe(v => {
+    // this runs before child component is finished
+    // so created a delay that will run after the view renders
+    // https://blog.angular-university.io/angular-debugging/
+    setTimeout(() => this.myForm.disable());
+
+    this.myForm.valueChanges.subscribe(() => {
       /* causes ExpressionChangedAfterItHasBeenCheckedError. Fix error keep code structure in places.   */
       this.disabled = true;
     });
+
+    console.log(this.extractDate(this.testData));
   }
 
   /* extract all dates from testData. ignore non date values */
-  private extractDate(obj: any): Date[] {
-    return [new Date()];
+
+  // can extract dates from objects & arrays any level layers deep
+  private extractDate(obj: object): Date[] {
+    let dates = [];
+    for (const val in obj) {
+      if (obj.hasOwnProperty(val)) {
+        // if it is another layer deep it loops through the next layer
+        if (typeof obj[val] === 'object' || Array.isArray(obj[val])) {
+          dates = [...dates, ...this.extractDate(obj[val])];
+        } else if (moment(obj[val], 'YYYY-MM-DD', true).isValid()) {
+          dates.push(obj[val]);
+        }
+      }
+    }
+    return dates;
   }
 
+  applyFilter(filterValue: string) {
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
 }
